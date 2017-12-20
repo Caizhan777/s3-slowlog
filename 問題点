@@ -3,6 +3,6 @@ rds_slowlog_lambda_to_s3.pyは今作成した関数ですが、一つのrdsのsl
 これを実現したいと、まず今持ってるRDSの一覧を取得しなければならないと思います、aws cli(AWS Command Line Interface)でrds一覧取得できることが分かってますが、さ
 取得のコマンドは以下みたいです。　　　
 $ aws rds describe-db-instances --region=ap-northeast-1 | jq -r '.DBInstances[].DBInstanceIdentifier' | while read RDS　　
-でも、aws cliはlambdaでの使い方が今わからないです。(直接関数の中に書きますか、それとも、どこに書けばいい。)
+でも、aws cliはlambdaで使えますか？もし使えば、使い方も今わからないです。(直接関数の中に書きますか、それとも、どこに書けばいい。)
 
 もし、鞠神が時間あれば、ちょっとヒントとか教えいただければ幸いです。よろしくお願いします。
