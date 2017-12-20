@@ -1,0 +1,9 @@
+rds_slowlog_lambda_to_s3.pyは今作成した関数ですが、一つのrdsのslowlogをlambdaという機能でS3にアップロードして、バックアップできることを実現しました。  
+今やりたいのは複数RDSのスローログを定期的（日次）にS3へバックアップできることですが、　　
+それを実現したいと、まず今持ってるRDSの一覧を取得しなければならないと思って、aws cli(AWS Command Line Interface)で一覧取得できることが分かってますが、さ
+取得のコマンドは以下みたいです。　　
+# get namelist of rds as $RDS　　
+$ aws rds describe-db-instances --region=ap-northeast-1 | jq -r '.DBInstances[].DBInstanceIdentifier' | while read RDS　　
+でも、aws cliはlambdaでどういう風に使いますかって今わからないです。(直接関数の中に書きますか、それとも、どこに書けばいい。)
+
+もし、鞠神が時間あれば、ちょっとヒントとか教えいただければ幸いです。
