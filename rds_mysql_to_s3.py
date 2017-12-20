@@ -15,7 +15,6 @@
 import boto3, botocore
 
 ## Set the values below if using Lambda Scheduled Event as an Event Source, otherwise leave empty and send data through the Lambda event payload
-#现在取到rds的一览了 变量@rds
 
 S3BCUKET='flp-stg-rds-logs'
 S3PREFIX='test1/'
