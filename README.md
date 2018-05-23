@@ -1,15 +1,4 @@
-NO	第1階層	第2階層	第3階層	第4階層	第5階層	出力する内容	サンプル	備考	固定値？	電話帳	  
-6	BreadcrumbList										  
-7		@type				BreadcrumbList	BreadcrumbList		YES		  
-8		itemListElement						パンくずの数だけ、itemListElement を繰り返す			  
-9			@type			ListItem	ListItem		YES		  
-10			position				1	パンくず第1階層⇒1 , 第2階層⇒2 , 第3階層⇒3			  
-11			item								  
-12				@type		Thing	Thing		YES		  
-13				@id		http://haisha-yoyaku.jp/	http://haisha-yoyaku.jp/	パンくずURL			  
-14				name		歯医者・歯科トップページ	歯医者・歯科トップページ	パンくずリスト名称		  	
-区切り											  
-区切り											  
+											  
 15	Dentist									  	
 16		@type				Dentist	Dentist		YES		  
 17		aggregateRating						レーティング口コミが3件未満で総合レーティングが表示されない場合は、aggregateRating配下を削除　18/05/22 井上	YES		●  
