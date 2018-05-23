@@ -1,83 +1,44 @@
-AWS Lambda function to export Amazon RDS MySQL Query Logs to S3
-
-Requirments
-
-In order to enable query logging in RDS you must enable the general_log in the RDS Parameter Group with the output format to FILE Details on how to do this are available from the Amazon RDS documentation http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.Concepts.MySQL.html
-
-Creating the IAM Execution Role
-
-The AWS Lambda service uses an IAM role to execute the function, below is the IAM policy needed by the function to run.
-Replace [BucketName] below with the name of the bucket in your account where you want the log files to be written to
-
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-            ],
-            "Resource": "arn:aws:logs:*:*:*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "s3:GetObject",
-                "s3:PutObject"
-            ],
-            "Resource": [
-                "arn:aws:s3:::[BucketName]/*"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "s3:ListBucket"
-            ],
-            "Resource": [
-                "arn:aws:s3:::[BucketName]"
-            ]
-        },
-        {
-            
-            "Effect": "Allow",
-            "Action": [
-                "rds:DescribeDBLogFiles",
-                "rds:DownloadDBLogFilePortion"
-            ],
-            "Resource": [
-                "*"
-            ]
-        }
-    ]
-}
-Configuring the AWS Lambda fucntion
-
-To create the new AWS Lambda function create a zip file that contains only the rds_mysql_to_s3.py and upload the zip file to a new AWS Lambda function.
-
-The Lambda Handler needs to be set to: rds_mysql_to_s3.lambda_handler The Runtime Environment is Python 2.7 Role needs to be set to a role that has the policy above. Modify the Timeout value (under Advanced) from the default of 3 seconds to at least 1 minute, if you have very large log files you may need to increase the timeout even further.
-
-Creating a Test Event
-
-The event input for the function is a JSON package that contains the information about the RDS instance and S3 bucket and has the following values:
-
-{
-  "BucketName": "[BucketName]",
-  "S3BucketPrefix": "[Prefix to use within the specified bucket]/",
-  "RDSInstanceName": "[RDS DB Instance Name]",
-  "LogNamePrefix" : "general/mysql-general",
-  "lastRecievedFile" : "lastWrittenMarker",
-  "Region"  :"[RegionName]"
-}
-Scheduling the AWS Lambda Function
-
-Since RDS only maintains log files for a maximum of 24 hours or until the log data exceeds 2% of the storage allocated to the DB Instance its adviseable to have the function run at least once per day. By setting up an Event Source in Lambda you can have the function run on a scheduled basis. As new log files are retrieved from the RDS service they will overwrite older log files of the same name in the S3 bucket/prefix so you should retrieve the log files from S3 prior to subsequent runs of the function. If you are going to leverage the Scheduled Event to call the function the event there is no way to pass a payload to the function so set the values at the top of the file with those the same values as the in the Test Event:
-
-S3BCUKET='[BucketName]'
-S3PREFIX='[Prefix to use within the specified bucket]/'
-RDSINSANCE='[RDS DB Instance Name]'
-LOGNAME='general/mysql-general'
-LASTRECIEVED='lastWrittenMarker'
-REGION='[RegionName]'
+NO	第1階層	第2階層	第3階層	第4階層	第5階層	出力する内容	サンプル	備考	固定値？	電話帳	
+6	BreadcrumbList										
+7		@type				BreadcrumbList	BreadcrumbList		YES		
+8		itemListElement						パンくずの数だけ、itemListElement を繰り返す			
+9			@type			ListItem	ListItem		YES		
+10			position				1	パンくず第1階層⇒1 , 第2階層⇒2 , 第3階層⇒3			
+11			item								
+12				@type		Thing	Thing		YES		
+13				@id		http://haisha-yoyaku.jp/	http://haisha-yoyaku.jp/	パンくずURL			
+14				name		歯医者・歯科トップページ	歯医者・歯科トップページ	パンくずリスト名称			
+区切り											
+区切り											
+15	Dentist										
+16		@type				Dentist	Dentist		YES		
+17		aggregateRating						レーティング口コミが3件未満で総合レーティングが表示されない場合は、aggregateRating配下を削除　18/05/22 井上	YES		●
+18			@type			AggregateRating	AggregateRating		YES		
+19			bestRating			レーティングのMAX値	5	総合MAX値5を追加　18/05/22 井上	YES		●
+20			ratingValue			レーティングスコア	4				
+21			reviewCount			口コミ数	200	※口コミ数			
+22			worstRating			レーティングのMIN値	0	総合MIN値0を追加　18/05/22 井上	YES		●
+23		review						"レビューの数だけ、reviewを繰り返す　1/27ターニャ
+aggregateRatingのみで問題なくなったので削除　18/05/22 井上"	YES		●
+24			@type			Review	Review		YES		●
+25			author			レーティングした人のニックネーム	矢島 義章				●
+26			datePublished			レーティングした日	2016-12-17				●
+27			description			口コミ内容	痛くなかったからよかった				●
+28			reviewRating						YES		●
+29				@type		Rating	Rating		YES		●
+30				bestRating		レーティングのMAX値	5		YES		●
+31				ratingValue		レーティングスコア	4				●
+32				worstRating		レーティングのMIN値	1		YES		●
+33			@type			Review	Review	投稿者2人目の場合	YES		●
+34			author			レーティングした人のニックネーム	矢島 義子				●
+35			datePublished			レーティングした日	2016-12-14				●
+36			description			口コミ内容	丁寧な治療で助かりました。				●
+37			reviewRating						YES		●
+38				@type		Rating	Rating		YES		●
+39				bestRating		レーティングのMAX値	5		YES		●
+40				ratingValue		レーティングスコア	5				●
+41				worstRating		レーティングのMIN値	1		YES		●
+42			@type			Review	Review	投稿者3人目(口コミのみ投稿者)の場合　※表示されている口コミ数(上限3)まで繰り返す。	YES		●
+43			author			レーティングした人のニックネーム	矢島 義男				●
+44			datePublished			レーティングした日	2016-12-11				●
+45			description			口コミ内容	また行きたい歯医者でした。				●
